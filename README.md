@@ -14,7 +14,7 @@ It will test them in a sandboxed platform emulator(s) and generate a report, sho
 or websites did during the test.
 
 > ⚠️ You can currently only set up Cuckoo3 on Linux(Ubuntu) machines with Python 3.10 and run Windows sandboxes.  
-Check our [Cuckoo3 requirements](https://cuckoo-hatch.cert.ee/static/docs/introduction/cuckoo/) for more information.
+Check our [Cuckoo3 requirements](https://cuckoo-hatch.cert.ee/static/docs/about/cuckoo/#cuckoo3-requirements) for more information.
 
 You can see it in action at our [online Cuckoo3 Sandbox](https://cuckoo-hatch.cert.ee/).  
 For more insight into our plans, [check out our roadmap here](https://github.com/orgs/cert-ee/projects/1/views/1).
