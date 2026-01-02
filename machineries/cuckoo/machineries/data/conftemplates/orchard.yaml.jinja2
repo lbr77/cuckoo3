@@ -1,0 +1,73 @@
+# Orchard API base url. Include the /v1 prefix if required by your deployment.
+api_url: {{ api_url }}
+
+# API token used to access Orchard. Leave empty for no auth.
+api_token: {{ api_token }}
+
+# Header name and token prefix to use for authentication.
+# Example: Authorization: Bearer <token>. Leave empty for no auth.
+auth_header: {{ auth_header }}
+token_prefix: {{ token_prefix }}
+
+# HTTP settings.
+timeout: {{ timeout }}
+verify_tls: {{ verify_tls }}
+
+# IP resolution and shutdown polling.
+ip_wait: {{ ip_wait }}
+ip_poll_interval: {{ ip_poll_interval }}
+stop_timeout: {{ stop_timeout }}
+stop_poll_interval: {{ stop_poll_interval }}
+
+# Create the VM resource in Orchard if missing.
+ensure_vm: {{ ensure_vm }}
+
+# (Optional) Default interface for packet capture.
+interface: {{ interface }}
+
+machines:
+{% for name, machine in machines.items() %}
+  {{ name }}:
+    # Cuckoo machine label.
+    label: {{ machine.label }}
+    # Orchard VM name. If empty, the label will be used.
+    vm_name: {{ machine.vm_name }}
+    # Static IP configured inside the VM (used when Orchard cannot resolve it).
+    ip: {{ machine.ip }}
+    # Operating system platform.
+    platform: {{ machine.platform }}
+    # OS version string.
+    os_version: "{{ machine.os_version }}"
+    # System architecture.
+    architecture: {{ machine.architecture }}
+    # TCP port of the agent.
+    agent_port: {{ machine.agent_port }}
+    # (Optional) MAC address.
+    mac_address: {{ machine.mac_address }}
+    # (Optional) Snapshot name (not used by Orchard).
+    snapshot: {{ machine.snapshot }}
+    # (Optional) Interface used for packet capture.
+    interface: {{ machine.interface }}
+    # Machine tags.
+    tags:
+    {% for tag in machine.tags %}
+    - {{ tag }}
+    {% endfor %}
+
+    # Orchard VM resources and host directory bindings.
+    resources:
+    {% for key, value in machine.resources.items() %}
+      {{ key }}: {{ value }}
+    {% endfor %}
+
+    host_dirs:
+    {% for host_dir in machine.host_dirs %}
+      - name: {{ host_dir.name }}
+        path: {{ host_dir.path }}
+        ro: {{ host_dir.ro }}
+    {% endfor %}
+
+    # Override defaults per machine if needed.
+    ip_wait: {{ machine.ip_wait }}
+    ensure_vm: {{ machine.ensure_vm }}
+{% endfor %}

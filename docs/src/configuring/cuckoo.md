@@ -117,6 +117,36 @@ submit:
 ```
 </br>
 
+### orchard.yaml
+Location: `conf/machineries/orchard.yaml`
+
+Use the Orchard machinery to manage macOS VMs through the Orchard orchestration API.
+
+```yaml
+api_url: http://127.0.0.1:6120/v1
+api_token: ""
+auth_header: ""
+token_prefix: ""
+timeout: 10
+verify_tls: true
+ip_wait: 30
+ensure_vm: true
+
+machines:
+  macos-1:
+    label: macos-1
+    vm_name: macos-1
+    ip: 192.168.1.101
+    platform: macos
+    os_version: "13"
+    architecture: amd64
+    agent_port: 8000
+    tags: [macos, xcode]
+    resources:
+      cpu: 4
+      memory: 8192
+```
+
 ### analysissettings.yaml
 Location: `conf/analysissettings.yaml`
 

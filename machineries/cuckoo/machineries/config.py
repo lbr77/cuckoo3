@@ -19,6 +19,63 @@ class MACAddress(config.String):
 
 exclude_autoload = []
 typeloaders = {
+    "orchard.yaml": {
+        "api_url": config.HTTPUrl(default_val="http://127.0.0.1:6120/v1"),
+        "api_token": config.String(default_val="", sensitive=True, allow_empty=True),
+        "auth_header": config.String(default_val="", allow_empty=True),
+        "token_prefix": config.String(default_val="", allow_empty=True),
+        "timeout": config.Int(default_val=10, min_value=1),
+        "verify_tls": config.Boolean(default_val=True),
+        "ip_wait": config.Int(default_val=30, min_value=0),
+        "ip_poll_interval": config.Int(default_val=2, min_value=1),
+        "stop_timeout": config.Int(default_val=30, min_value=1),
+        "stop_poll_interval": config.Int(default_val=2, min_value=1),
+        "ensure_vm": config.Boolean(default_val=True),
+        "interface": config.NetworkInterface(
+            allow_empty=True, must_be_up=False, must_exist=False, required=False
+        ),
+        "machines": config.NestedDictionary(
+            "example1",
+            {
+                "label": config.String(default_val="example1"),
+                "vm_name": config.String(
+                    allow_empty=True, required=False, default_val=""
+                ),
+                "ip": config.String(default_val="192.168.1.101"),
+                "platform": config.String(default_val="macos", to_lower=True),
+                "os_version": config.String(default_val="13"),
+                "mac_address": MACAddress(
+                    allow_empty=True, to_lower=True, required=False
+                ),
+                "snapshot": config.String(allow_empty=True, required=False),
+                "interface": config.NetworkInterface(
+                    allow_empty=True, must_be_up=False, must_exist=False, required=False
+                ),
+                "agent_port": config.Int(
+                    default_val=8000, required=False, min_value=1, max_value=2**16 - 1
+                ),
+                "architecture": config.String(default_val="amd64", to_lower=True),
+                "tags": config.List(
+                    config.String, ["exampletag1", "exampletag2"], allow_empty=True
+                ),
+                "resources": config.Dict(
+                    config.Int, default_val={}, allow_empty=True, required=False
+                ),
+                "host_dirs": config.DictList(
+                    {
+                        "name": config.String(allow_empty=True, required=False),
+                        "path": config.String(allow_empty=True, required=False),
+                        "ro": config.Boolean(default_val=False, required=False),
+                    },
+                    default_val=[],
+                    allow_empty=True,
+                    required=False,
+                ),
+                "ip_wait": config.Int(required=False, min_value=0),
+                "ensure_vm": config.Boolean(required=False),
+            },
+        ),
+    },
     "proxmox.yaml": {
         "dsn": config.String(default_val="xxx.xxx.xxx.xxx"),
         "user": config.String(default_val="root@pam"),
