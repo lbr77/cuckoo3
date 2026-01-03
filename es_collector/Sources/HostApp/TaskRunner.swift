@@ -46,6 +46,7 @@ final class TaskRunner {
         try FileIO.ensureDir(analysisDir)
         try FileIO.ensureDir(taskDir)
         try FileIO.ensureDir(Paths.screenshotsDir(taskId: taskId))
+        try FileIO.ensureDir(Paths.eventsDir(taskId: taskId))
         try writeExtensionConfig()
         try writeAnalysisJSON()
         try writeTaskJSON()
@@ -136,8 +137,19 @@ final class TaskRunner {
 
     private func finishTask(_ result: Result<Void, Error>) {
         stateQueue.sync {
+            cleanupTaskFiles()
             completionHandler?(result)
             completionHandler = nil
+        }
+    }
+
+    private func cleanupTaskFiles() {
+        let fileManager = FileManager.default
+        let paths = [Paths.taskFile, Paths.extensionConfigFile]
+        for path in paths {
+            if fileManager.fileExists(atPath: path) {
+                try? fileManager.removeItem(atPath: path)
+            }
         }
     }
 
@@ -200,7 +212,8 @@ final class TaskRunner {
         let config = ExtensionConfig(
             targetPid: currentTask.targetPid,
             targetPath: currentTask.targetPath,
-            outputPath: Paths.eventsPath(taskId: currentTask.taskId)
+            outputPath: Paths.eventsPath(taskId: currentTask.taskId),
+            outputDir: Paths.eventsDir(taskId: currentTask.taskId)
         )
         try FileIO.writeJSON(config, to: Paths.extensionConfigFile)
     }

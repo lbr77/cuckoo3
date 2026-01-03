@@ -23,6 +23,10 @@ enum Paths {
         return "\(taskDir(taskId: taskId))/events.jsonl"
     }
 
+    static func eventsDir(taskId: String) -> String {
+        return "\(taskDir(taskId: taskId))/events"
+    }
+
     static func pcapPath(taskId: String) -> String {
         return "\(taskDir(taskId: taskId))/pcap.pcap"
     }

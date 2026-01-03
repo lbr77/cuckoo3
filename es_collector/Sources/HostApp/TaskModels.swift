@@ -70,4 +70,5 @@ struct ExtensionConfig: Codable {
     let targetPid: Int?
     let targetPath: String?
     let outputPath: String
+    let outputDir: String?
 }
